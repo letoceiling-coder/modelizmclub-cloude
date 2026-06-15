@@ -43,7 +43,7 @@ return [
             'root' => storage_path('app/public'),
             // MEDIA_URL — выделенный поддомен для фото/медиа (например, https://img.modelizmclub.ru).
             // По умолчанию отдаём с основного домена через /storage.
-            'url' => env('MEDIA_URL', rtrim(env('APP_URL', 'http://localhost'), '/').'/storage'),
+            'url' => config('media.url') ?: rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -56,7 +56,7 @@ return [
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
             // Публичные URL медиа — через поддомен img (MEDIA_URL), не напрямую из S3.
-            'url' => env('AWS_URL', env('MEDIA_URL')),
+            'url' => env('AWS_URL') ?: config('media.url'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'visibility' => 'public',

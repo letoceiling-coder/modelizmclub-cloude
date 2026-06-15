@@ -39,7 +39,8 @@ set_env AWS_DEFAULT_REGION "$AWS_DEFAULT_REGION"
 set_env AWS_BUCKET "$AWS_BUCKET"
 set_env AWS_ENDPOINT "$AWS_ENDPOINT"
 set_env AWS_USE_PATH_STYLE_ENDPOINT "true"
-set_env AWS_URL ""
+# AWS_URL не задаём — URL медиа берётся из MEDIA_URL (img-поддомен).
+sed -i '/^AWS_URL=/d' .env 2>/dev/null || true
 
 echo "==== [2] Проверка записи/чтения S3 ===="
 php artisan config:clear
@@ -55,9 +56,10 @@ echo 'S3_OK ' . \$disk->url('${TEST_KEY}') . PHP_EOL;
 \$disk->delete('${TEST_KEY}');
 "
 
-echo "==== [3] Nginx: ${IMG_DOMAIN} → Selectel S3 ===="
+echo "==== [3] Nginx: ${IMG_DOMAIN} → Laravel (прокси S3, приватный бакет) ===="
 AVAIL="/etc/nginx/sites-available/${IMG_DOMAIN}"
 ENABLED="/etc/nginx/sites-enabled/${IMG_DOMAIN}"
+ROOT="${APP_DIR}/public"
 
 cat > "$AVAIL" <<NGINX
 server {
@@ -73,33 +75,31 @@ server {
     listen [::]:443 ssl http2;
     server_name ${IMG_DOMAIN};
 
+    root ${ROOT};
+    index index.php;
+    charset utf-8;
+    client_max_body_size 220M;
+
     ssl_certificate     /etc/letsencrypt/live/${IMG_DOMAIN}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/${IMG_DOMAIN}/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
 
-    # Кэш статики на CDN-уровне (браузер + nginx)
-    add_header Cache-Control "public, max-age=604800, immutable" always;
-    add_header Access-Control-Allow-Origin "*" always;
+    add_header X-Content-Type-Options "nosniff" always;
 
     location / {
-        proxy_pass https://${S3_HOST}/${AWS_BUCKET}/;
-        proxy_ssl_server_name on;
-        proxy_set_header Host ${S3_HOST};
-        proxy_hide_header x-amz-request-id;
-        proxy_hide_header x-amz-id-2;
-        proxy_intercept_errors on;
-        error_page 404 =404 /404;
+        try_files \$uri \$uri/ /index.php?\$query_string;
     }
 
-    location = /404 {
-        internal;
-        default_type text/plain;
-        return 404 'Not found';
+    location ~ \.php\$ {
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name;
+        include fastcgi_params;
+        fastcgi_hide_header X-Powered-By;
     }
 }
 NGINX
 
-# Временный HTTP-only конфиг для certbot, если сертификата ещё нет
+# Временный HTTP для certbot
 if [ ! -d "/etc/letsencrypt/live/${IMG_DOMAIN}" ]; then
   cat > "$AVAIL" <<NGINX
 server {
@@ -115,10 +115,8 @@ NGINX
   nginx -t && systemctl reload nginx
   certbot certonly --nginx -d "${IMG_DOMAIN}" -n --agree-tos \
     --register-unsafely-without-email --keep-until-expiring || true
-fi
-
-# Полный HTTPS-конфиг (повторно, после cert)
-cat > "$AVAIL" <<NGINX
+  # Перезаписать полный конфиг после cert
+  cat > "$AVAIL" <<NGINX
 server {
     listen 80;
     listen [::]:80;
@@ -132,30 +130,27 @@ server {
     listen [::]:443 ssl http2;
     server_name ${IMG_DOMAIN};
 
+    root ${ROOT};
+    index index.php;
+    charset utf-8;
+    client_max_body_size 220M;
+
     ssl_certificate     /etc/letsencrypt/live/${IMG_DOMAIN}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/${IMG_DOMAIN}/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
 
-    add_header Cache-Control "public, max-age=604800, immutable" always;
-    add_header Access-Control-Allow-Origin "*" always;
-
     location / {
-        proxy_pass https://${S3_HOST}/${AWS_BUCKET}/;
-        proxy_ssl_server_name on;
-        proxy_set_header Host ${S3_HOST};
-        proxy_hide_header x-amz-request-id;
-        proxy_hide_header x-amz-id-2;
-        proxy_intercept_errors on;
-        error_page 404 =404 /404;
+        try_files \$uri \$uri/ /index.php?\$query_string;
     }
 
-    location = /404 {
-        internal;
-        default_type text/plain;
-        return 404 'Not found';
+    location ~ \.php\$ {
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name;
+        include fastcgi_params;
     }
 }
 NGINX
+fi
 
 ln -sf "$AVAIL" "$ENABLED"
 nginx -t && systemctl reload nginx
