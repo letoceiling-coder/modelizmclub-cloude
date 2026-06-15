@@ -55,9 +55,11 @@ return [
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
+            // Публичные URL медиа — через поддомен img (MEDIA_URL), не напрямую из S3.
+            'url' => env('AWS_URL', env('MEDIA_URL')),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            'visibility' => 'public',
             'throw' => false,
             'report' => false,
         ],
