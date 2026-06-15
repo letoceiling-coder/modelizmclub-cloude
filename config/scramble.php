@@ -21,6 +21,12 @@ return [
     'api_path' => 'api',
 
     /*
+     * Открыть документацию на не-локальных окружениях (дев-сервер).
+     * Читается через config(), чтобы корректно работать с `config:cache`.
+     */
+    'docs_enabled' => env('SCRAMBLE_ENABLED', false),
+
+    /*
      * Your API domain. By default, app domain is used. This is also a part of the default API routes
      * matcher, so when implementing your own, make sure you use this config if needed.
      */

@@ -53,7 +53,7 @@ class AppServiceProvider extends ServiceProvider
         // Доступ к OpenAPI-документации (Scramble): локально всегда,
         // на дев-сервере — через флаг SCRAMBLE_ENABLED.
         Gate::define('viewApiDocs', static function ($user = null): bool {
-            return ! app()->isProduction() || (bool) env('SCRAMBLE_ENABLED', false);
+            return ! app()->isProduction() || (bool) config('scramble.docs_enabled');
         });
 
         // Стабильные алиасы полиморфных связей для API/БД
