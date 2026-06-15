@@ -10,8 +10,11 @@ use App\Domains\Users\Http\Requests\UpdateProfileRequest;
 use App\Domains\Users\Http\Resources\UserResource;
 use App\Domains\Users\Models\User;
 use App\Http\Controllers\Controller;
+use App\Support\Media\ImageProcessor;
+use App\Support\Media\UploadPolicy;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -48,15 +51,31 @@ class ProfileController extends Controller
         return UserResource::make($user->fresh('interests'));
     }
 
-    /** Загрузка аватара. */
+    /** Загрузка аватара: приводится к WebP и квадратной обрезке. */
     public function uploadAvatar(Request $request): UserResource
     {
         $request->validate([
-            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'avatar' => array_merge(['required'], UploadPolicy::fileRules('avatar')),
         ]);
 
         $user = $request->user();
-        $path = $request->file('avatar')->store('avatars', 'public');
+        $disk = config('uploads.disk', 'public');
+
+        $conversion = (array) config('uploads.profiles.avatar.conversions.medium', ['width' => 512, 'height' => 512]);
+        $path = ImageProcessor::storeWebp(
+            $request->file('avatar'),
+            'avatars',
+            (int) ($conversion['width'] ?? 512),
+            (int) ($conversion['height'] ?? 512),
+            $disk,
+        );
+
+        // Удаляем прежний аватар, чтобы не копить мусор.
+        $oldPath = $user->getAttributes()['avatar_path'] ?? null;
+        if ($oldPath && Storage::disk($disk)->exists($oldPath)) {
+            Storage::disk($disk)->delete($oldPath);
+        }
+
         $user->forceFill(['avatar_path' => $path])->save();
 
         return UserResource::make($user->fresh());

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Feed\Http\Requests;
 
+use App\Support\Media\UploadPolicy;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePostRequest extends FormRequest
@@ -18,8 +19,8 @@ class UpdatePostRequest extends FormRequest
      */
     public function rules(): array
     {
-        $maxPhotos = (int) config('modelizm.posts.max_photos', 10);
-        $maxImageKb = (int) config('modelizm.media.image_max_size_kb', 15360);
+        [, $photoItem] = UploadPolicy::arrayRules('post_photo');
+        $maxPhotos = UploadPolicy::maxCount('post_photo');
 
         return [
             'title' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -28,7 +29,7 @@ class UpdatePostRequest extends FormRequest
             'tags' => ['sometimes', 'array', 'max:20'],
             'tags.*' => ['string', 'max:50'],
             'photos' => ['sometimes', 'array', "max:{$maxPhotos}"],
-            'photos.*' => ['file', 'image', 'mimes:jpg,jpeg,png,webp,gif', "max:{$maxImageKb}"],
+            'photos.*' => $photoItem,
         ];
     }
 }

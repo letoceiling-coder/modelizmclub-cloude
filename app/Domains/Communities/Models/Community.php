@@ -9,6 +9,7 @@ use App\Domains\Communities\Enums\CommunityStatus;
 use App\Domains\Feed\Models\Post;
 use App\Domains\Moderation\Models\ModerationItem;
 use App\Domains\Users\Models\User;
+use App\Support\Media\HasConfiguredConversions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Community extends Model implements HasMedia
 {
+    use HasConfiguredConversions;
     use HasFactory;
     use InteractsWithMedia;
     use SoftDeletes;
@@ -67,8 +69,9 @@ class Community extends Model implements HasMedia
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this->addMediaConversion('thumb')->width(300)->height(300)->nonQueued();
-        $this->addMediaConversion('medium')->width(900)->height(900);
+        $this->registerConfiguredConversions('community_avatar', 'avatar');
+        $this->registerConfiguredConversions('community_cover', 'cover');
+        $this->registerConfiguredConversions('ad_photo', 'gallery');
     }
 
     // --- Отношения ----------------------------------------------------------

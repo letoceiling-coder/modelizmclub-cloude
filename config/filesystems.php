@@ -41,7 +41,9 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            // MEDIA_URL — выделенный поддомен для фото/медиа (например, https://img.modelizmclub.ru).
+            // По умолчанию отдаём с основного домена через /storage.
+            'url' => env('MEDIA_URL', rtrim(env('APP_URL', 'http://localhost'), '/').'/storage'),
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

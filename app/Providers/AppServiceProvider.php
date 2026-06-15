@@ -19,8 +19,11 @@ use App\Domains\Feed\Policies\PostPolicy;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use SocialiteProviders\Manager\SocialiteWasCalled;
@@ -54,6 +57,21 @@ class AppServiceProvider extends ServiceProvider
         // на дев-сервере — через флаг SCRAMBLE_ENABLED.
         Gate::define('viewApiDocs', static function ($user = null): bool {
             return ! app()->isProduction() || (bool) config('scramble.docs_enabled');
+        });
+
+        // Глобальный лимит запросов к API: по пользователю (если авторизован) либо по IP.
+        RateLimiter::for('api', static function (Request $request): Limit {
+            $perMinute = (int) config('modelizm.rate_limit.api_per_minute', 120);
+
+            return $request->user()
+                ? Limit::perMinute($perMinute)->by('user:'.$request->user()->id)
+                : Limit::perMinute((int) config('modelizm.rate_limit.guest_per_minute', 40))->by('ip:'.$request->ip());
+        });
+
+        // Лимит на загрузку файлов (создание/обновление постов, объявлений, аватара).
+        RateLimiter::for('uploads', static function (Request $request): Limit {
+            return Limit::perMinute((int) config('modelizm.rate_limit.uploads_per_minute', 30))
+                ->by('upl:'.(optional($request->user())->id ?: $request->ip()));
         });
 
         // Стабильные алиасы полиморфных связей для API/БД

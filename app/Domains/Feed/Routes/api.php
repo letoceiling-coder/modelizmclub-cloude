@@ -15,9 +15,9 @@ Route::get('posts/{post}/comments', [CommentController::class, 'index']);
 Route::get('comments/{comment}/replies', [CommentController::class, 'replies']);
 
 Route::middleware('auth:sanctum')->group(function (): void {
-    // Посты
-    Route::post('posts', [PostController::class, 'store']);
-    Route::match(['put', 'patch'], 'posts/{post}', [PostController::class, 'update']);
+    // Посты (создание/обновление — со строгим лимитом из-за загрузки медиа)
+    Route::post('posts', [PostController::class, 'store'])->middleware('throttle:uploads');
+    Route::match(['put', 'patch'], 'posts/{post}', [PostController::class, 'update'])->middleware('throttle:uploads');
     Route::delete('posts/{post}', [PostController::class, 'destroy']);
     Route::post('posts/{post}/pin', [PostController::class, 'pin']);
     Route::delete('posts/{post}/pin', [PostController::class, 'unpin']);

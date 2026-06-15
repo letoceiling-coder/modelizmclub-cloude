@@ -11,6 +11,7 @@ use App\Domains\Communities\Models\CommunitySection;
 use App\Domains\Feed\Enums\PostStatus;
 use App\Domains\Moderation\Models\ModerationItem;
 use App\Domains\Users\Models\User;
+use App\Support\Media\HasConfiguredConversions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +26,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Post extends Model implements HasMedia
 {
+    use HasConfiguredConversions;
     use HasFactory;
     use InteractsWithMedia;
     use SoftDeletes;
@@ -60,17 +62,16 @@ class Post extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('photos')
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
+            ->acceptsMimeTypes(config('uploads.profiles.post_photo.mimes', []));
 
         $this->addMediaCollection('video')
             ->singleFile()
-            ->acceptsMimeTypes(['video/mp4', 'video/webm', 'video/quicktime']);
+            ->acceptsMimeTypes(config('uploads.profiles.post_video.mimes', []));
     }
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this->addMediaConversion('thumb')->width(400)->height(400)->performOnCollections('photos');
-        $this->addMediaConversion('medium')->width(1080)->performOnCollections('photos');
+        $this->registerConfiguredConversions('post_photo', 'photos');
     }
 
     // --- Отношения ----------------------------------------------------------

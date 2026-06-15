@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AddLogContext;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,14 +19,29 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // За nginx/обратным прокси: доверяем заголовкам X-Forwarded-* (https, ip).
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
+        ]);
+
+        // Глобальный троттлинг API + контекст логов на каждый запрос.
+        $middleware->api(append: [
+            'throttle:api',
+            AddLogContext::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );
+
+        // Все ошибки попадают в дневной файл logs/errors/ через канал-стек
+        // (LOG_STACK=daily,errors). Здесь добавляем контекст к каждому отчёту.
+        $exceptions->context(fn (): array => [
+            'env' => app()->environment(),
+        ]);
     })->create();

@@ -47,10 +47,10 @@ return [
     'conversions_disk_name' => env('MEDIA_CONVERSIONS_DISK', null),
 
     /*
-     * The maximum file size of an item in bytes.
-     * Adding a larger file will result in an exception.
+     * The maximum file size of an item in bytes. Согласовано с config/uploads.php
+     * (UPLOAD_MAX_FILE_KB, по умолчанию 200 МБ под видео).
      */
-    'max_file_size' => 1024 * 1024 * 10, // 10MB
+    'max_file_size' => 1024 * (int) env('UPLOAD_MAX_FILE_KB', 204800),
 
     /*
      * Uploads whose file name contains any of these extensions will be rejected.
@@ -72,7 +72,11 @@ return [
      * in `shell.php.jpg`) is rejected even if the final extension is allowed.
      * Leave `null` to disable allowlisting.
      */
-    'allowed_extensions' => null,
+    'allowed_extensions' => [
+        'jpg', 'jpeg', 'png', 'webp', 'gif', // изображения
+        'mp4', 'webm', 'mov',                // видео
+        'pdf',                               // документы (вложения в чат)
+    ],
 
     /*
      * This queue connection will be used to generate derived and responsive images.

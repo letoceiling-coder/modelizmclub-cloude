@@ -60,4 +60,11 @@ return [
         'default_provider' => env('MODELIZM_PAYMENT_PROVIDER', 'vtb'),
         'currency' => 'RUB',
     ],
+
+    // Лимиты запросов (rate limiting)
+    'rate_limit' => [
+        'api_per_minute' => (int) env('RATE_LIMIT_API', 120),
+        'guest_per_minute' => (int) env('RATE_LIMIT_GUEST', 40),
+        'uploads_per_minute' => (int) env('RATE_LIMIT_UPLOADS', 30),
+    ],
 ];

@@ -12,6 +12,7 @@ use App\Domains\Catalog\Models\DeliveryMethod;
 use App\Domains\Feed\Models\Bookmark;
 use App\Domains\Moderation\Models\ModerationItem;
 use App\Domains\Users\Models\User;
+use App\Support\Media\HasConfiguredConversions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +26,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Ad extends Model implements HasMedia
 {
+    use HasConfiguredConversions;
     use HasFactory;
     use InteractsWithMedia;
     use SoftDeletes;
@@ -65,13 +67,12 @@ class Ad extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('photos')
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+            ->acceptsMimeTypes(config('uploads.profiles.ad_photo.mimes', []));
     }
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this->addMediaConversion('thumb')->width(400)->height(400);
-        $this->addMediaConversion('medium')->width(1080);
+        $this->registerConfiguredConversions('ad_photo', 'photos');
     }
 
     public function user(): BelongsTo

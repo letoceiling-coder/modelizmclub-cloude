@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::patch('profile', [ProfileController::class, 'update']);
     Route::put('profile/privacy', [ProfileController::class, 'updatePrivacy']);
     Route::put('profile/interests', [ProfileController::class, 'syncInterests']);
-    Route::post('profile/avatar', [ProfileController::class, 'uploadAvatar']);
+    Route::post('profile/avatar', [ProfileController::class, 'uploadAvatar'])->middleware('throttle:uploads');
     Route::post('users/{user}/block', [ProfileController::class, 'block']);
     Route::delete('users/{user}/block', [ProfileController::class, 'unblock']);
 });

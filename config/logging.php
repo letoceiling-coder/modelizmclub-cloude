@@ -73,6 +73,20 @@ return [
             'replace_placeholders' => true,
         ],
 
+        /*
+         * Отдельный канал только для ошибок (level >= error). Каждый день —
+         * новый файл logs/errors/error-YYYY-MM-DD.log. Хранится дольше обычных
+         * логов, чтобы инциденты не «убегали» из ротации.
+         */
+        'errors' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/errors/error.log'),
+            'level' => 'error',
+            'days' => env('LOG_ERROR_DAYS', 90),
+            'permission' => 0640,
+            'replace_placeholders' => true,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

@@ -25,8 +25,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
@@ -76,6 +79,26 @@ class User extends Authenticatable
             'status' => UserStatus::class,
             'gender' => Gender::class,
         ];
+    }
+
+    // --- Атрибуты -----------------------------------------------------------
+
+    /** Полный URL аватара (через настраиваемый медиа-диск/поддомен). */
+    protected function avatarUrl(): Attribute
+    {
+        return Attribute::get(function (): ?string {
+            $path = $this->attributes['avatar_path'] ?? null;
+
+            if (! $path) {
+                return null;
+            }
+
+            if (Str::startsWith($path, ['http://', 'https://'])) {
+                return $path;
+            }
+
+            return Storage::disk(config('uploads.disk', 'public'))->url($path);
+        });
     }
 
     // --- Отношения ----------------------------------------------------------

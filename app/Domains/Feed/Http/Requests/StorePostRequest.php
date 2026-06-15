@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Feed\Http\Requests;
 
+use App\Support\Media\UploadPolicy;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePostRequest extends FormRequest
@@ -18,9 +19,7 @@ class StorePostRequest extends FormRequest
      */
     public function rules(): array
     {
-        $maxPhotos = (int) config('modelizm.posts.max_photos', 10);
-        $maxImageKb = (int) config('modelizm.media.image_max_size_kb', 15360);
-        $maxVideoKb = (int) config('modelizm.posts.max_video_size_mb', 200) * 1024;
+        [$photosArray, $photoItem] = UploadPolicy::arrayRules('post_photo');
 
         return [
             'title' => ['nullable', 'string', 'max:255'],
@@ -31,9 +30,9 @@ class StorePostRequest extends FormRequest
             'repost_of_id' => ['nullable', 'integer', 'exists:posts,id'],
             'tags' => ['nullable', 'array', 'max:20'],
             'tags.*' => ['string', 'max:50'],
-            'photos' => ['nullable', 'array', "max:{$maxPhotos}"],
-            'photos.*' => ['file', 'image', 'mimes:jpg,jpeg,png,webp,gif', "max:{$maxImageKb}"],
-            'video' => ['nullable', 'file', 'mimetypes:video/mp4,video/webm,video/quicktime', "max:{$maxVideoKb}"],
+            'photos' => $photosArray,
+            'photos.*' => $photoItem,
+            'video' => array_merge(['nullable'], UploadPolicy::fileRules('post_video')),
         ];
     }
 

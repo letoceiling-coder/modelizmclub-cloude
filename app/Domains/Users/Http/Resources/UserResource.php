@@ -26,7 +26,7 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'username' => $this->username,
-            'avatar_url' => $this->avatar_path ? asset('storage/'.$this->avatar_path) : null,
+            'avatar_url' => $this->avatar_url,
             'bio' => $this->bio,
             'city' => $this->whenLoaded('city', fn () => [
                 'id' => $this->city->id,
