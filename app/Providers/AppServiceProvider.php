@@ -37,6 +37,11 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Swagger / QA: все запросы идут в отдельную тестовую БД (CRUD-песочница).
+        if (config('modelizm.qa.enabled')) {
+            config(['database.default' => config('modelizm.qa.connection', 'pgsql_qa')]);
+        }
+
         // Фабрики доменных моделей живут в database/factories с именем <Модель>Factory
         Factory::guessFactoryNamesUsing(
             static fn (string $modelName): string => 'Database\\Factories\\'.Str::afterLast($modelName, '\\').'Factory'

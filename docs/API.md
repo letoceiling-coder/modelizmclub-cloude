@@ -43,14 +43,30 @@ Authorization: Bearer <token>
 | GET | `/auth/social/{provider}/redirect` | OAuth-редирект (VK ID, Yandex ID) |
 | GET | `/auth/social/{provider}/callback` | OAuth-callback |
 
+### QA-песочница (тестовая БД для Swagger)
+
+На dev-сервере (`dev-cloude.modelizmclub.ru`) включён режим **`DB_USE_QA=true`**: API и Swagger Try It
+работают с **отдельной PostgreSQL-базой** `modelizm_cloude_qa`. CRUD-операции (создание, редактирование,
+удаление) не затрагивают основную БД.
+
+Пересоздать QA-базу с тестовыми данными:
+
+```bash
+php artisan qa:reset --force
+# или на сервере:
+bash deploy/server-qa-db.sh
+```
+
+После сида в БД есть: справочники, demo/admin-пользователи, ~15 factory-пользователей (пароль `password`),
+5 сообществ, посты, комментарии, реакции.
+
 ### Тестовые учётные данные (QA / Swagger Try It)
 
-На dev-сервере после `php artisan db:seed --class=DemoUserSeeder`:
-
-| Переменная | Значение по умолчанию |
-|-----------|------------------------|
-| `SANCTUM_EMAIL` | `demo@modelizmclub.ru` |
-| `SANCTUM_PASSWORD` | `DemoPass123` |
+| Переменная / роль | E-mail | Пароль |
+|-------------------|--------|--------|
+| `SANCTUM_EMAIL` / demo | `demo@modelizmclub.ru` | `DemoPass123` |
+| Админ | `admin@modelizmclub.ru` | `password` |
+| Factory-пользователи | *(см. API)* | `password` |
 
 ```bash
 # Вход (полный путь API)

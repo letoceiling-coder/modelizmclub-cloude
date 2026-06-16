@@ -67,18 +67,31 @@ return [
         4. Нажмите **Authorize** (замок) → введите `Bearer <token>` → **Authorize**.
         5. Проверьте **`GET /auth/me`** и **`GET /ping`**.
 
+        ## QA-песочница (тестовая БД)
+
+        На **dev-cloude** включён режим `DB_USE_QA=true`: все запросы Swagger/API работают
+        с **отдельной PostgreSQL-базой** (`modelizm_cloude_qa`), не затрагивая основную БД.
+        Создание, редактирование и удаление в Try It безопасны для тестов.
+
+        Пересоздать QA-базу с нуля (справочники + demo-контент):
+
+        ```bash
+        php artisan qa:reset --force
+        ```
+
+        **Что внутри после `qa:reset`:**
+        - Справочники: города, категории, тарифы, правила контента
+        - Пользователи: demo QA, admin, ~15 factory-пользователей (пароль `password`)
+        - 5 сообществ с разделами и участниками
+        - Посты, комментарии, реакции
+
         ## Тестовые учётные данные (dev)
 
         | Роль | E-mail | Пароль | Примечание |
         |------|--------|--------|------------|
-        | QA / demo | `demo@modelizmclub.ru` | `DemoPass123` | `SANCTUM_EMAIL` / `SANCTUM_PASSWORD` в `.env` |
-        | Админ | `admin@modelizmclub.ru` | `password` | после `AdminUserSeeder` |
-
-        Создание demo-пользователя на сервере:
-
-        ```bash
-        php artisan db:seed --class=DemoUserSeeder --force
-        ```
+        | QA / demo | `demo@modelizmclub.ru` | `DemoPass123` | основной аккаунт для Swagger |
+        | Админ | `admin@modelizmclub.ru` | `password` | роль admin |
+        | Factory-пользователи | *(email из GET /users)* | `password` | ~15 шт. после qa:reset |
 
         ### Пример входа
 

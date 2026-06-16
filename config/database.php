@@ -99,6 +99,25 @@ return [
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
+        /*
+         * QA-песочница для Swagger Try It (CRUD без влияния на основную БД).
+         * Активируется через DB_USE_QA=true — см. config/modelizm.php.
+         */
+        'pgsql_qa' => [
+            'driver' => 'pgsql',
+            'url' => env('DB_QA_URL'),
+            'host' => env('DB_QA_HOST', env('DB_HOST', '127.0.0.1')),
+            'port' => env('DB_QA_PORT', env('DB_PORT', '5432')),
+            'database' => env('DB_QA_DATABASE', 'modelizm_cloude_qa'),
+            'username' => env('DB_QA_USERNAME', env('DB_USERNAME', 'root')),
+            'password' => env('DB_QA_PASSWORD', env('DB_PASSWORD', '')),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),

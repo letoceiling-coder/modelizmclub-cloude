@@ -67,4 +67,14 @@ return [
         'guest_per_minute' => (int) env('RATE_LIMIT_GUEST', 40),
         'uploads_per_minute' => (int) env('RATE_LIMIT_UPLOADS', 30),
     ],
+
+    /*
+     * QA-песочница: отдельная PostgreSQL-база для Swagger Try It и CRUD-тестов.
+     * На dev-cloude включите DB_USE_QA=true и выполните php artisan qa:reset.
+     */
+    'qa' => [
+        'enabled' => filter_var(env('DB_USE_QA', false), FILTER_VALIDATE_BOOL),
+        'connection' => env('DB_QA_CONNECTION', 'pgsql_qa'),
+        'database' => env('DB_QA_DATABASE', 'modelizm_cloude_qa'),
+    ],
 ];
