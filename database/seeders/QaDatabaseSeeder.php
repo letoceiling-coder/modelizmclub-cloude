@@ -16,7 +16,7 @@ class QaDatabaseSeeder extends Seeder
     {
         $this->call([
             DatabaseSeeder::class,
-            DemoSeeder::class,
+            QaContentSeeder::class,
         ]);
     }
 }

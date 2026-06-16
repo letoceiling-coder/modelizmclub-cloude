@@ -57,8 +57,9 @@ php artisan qa:reset --force
 bash deploy/server-qa-db.sh
 ```
 
-После сида в БД есть: справочники, demo/admin-пользователи, ~15 factory-пользователей (пароль `password`),
-5 сообществ, посты, комментарии, реакции.
+После сида в БД есть: справочники, demo/admin-пользователи, 5 QA-пользователей
+(`qa_user_1@modelizmclub.ru` … `qa_user_5@modelizmclub.ru`, пароль `password`),
+2 сообщества, 3 поста с комментариями и реакциями.
 
 ### Тестовые учётные данные (QA / Swagger Try It)
 
@@ -66,7 +67,7 @@ bash deploy/server-qa-db.sh
 |-------------------|--------|--------|
 | `SANCTUM_EMAIL` / demo | `demo@modelizmclub.ru` | `DemoPass123` |
 | Админ | `admin@modelizmclub.ru` | `password` |
-| Factory-пользователи | *(см. API)* | `password` |
+| Factory-пользователи | `qa_user_1@modelizmclub.ru` … `qa_user_5@modelizmclub.ru` | `password` |
 
 ```bash
 # Вход (полный путь API)

@@ -17,6 +17,6 @@ it('defines qa sandbox database connection', function (): void {
 it('QaDatabaseSeeder includes demo content seeder', function (): void {
     $source = file_get_contents(database_path('seeders/QaDatabaseSeeder.php'));
 
-    expect($source)->toContain('DemoSeeder::class')
+    expect($source)->toContain('QaContentSeeder::class')
         ->and($source)->toContain('DatabaseSeeder::class');
 });

@@ -81,9 +81,9 @@ return [
 
         **Что внутри после `qa:reset`:**
         - Справочники: города, категории, тарифы, правила контента
-        - Пользователи: demo QA, admin, ~15 factory-пользователей (пароль `password`)
-        - 5 сообществ с разделами и участниками
-        - Посты, комментарии, реакции
+        - Пользователи: demo QA, admin, 5 QA-пользователей (`qa_user_1@modelizmclub.ru` … `qa_user_5@modelizmclub.ru`, пароль `password`)
+        - 2 сообщества с разделами и участниками
+        - 3 поста с комментариями и реакциями
 
         ## Тестовые учётные данные (dev)
 
@@ -91,7 +91,7 @@ return [
         |------|--------|--------|------------|
         | QA / demo | `demo@modelizmclub.ru` | `DemoPass123` | основной аккаунт для Swagger |
         | Админ | `admin@modelizmclub.ru` | `password` | роль admin |
-        | Factory-пользователи | *(email из GET /users)* | `password` | ~15 шт. после qa:reset |
+        | Factory-пользователи | `qa_user_1@modelizmclub.ru` … `qa_user_5@modelizmclub.ru` | `password` | 5 шт. после qa:reset |
 
         ### Пример входа
 
