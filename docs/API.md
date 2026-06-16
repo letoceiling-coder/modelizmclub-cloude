@@ -43,6 +43,30 @@ Authorization: Bearer <token>
 | GET | `/auth/social/{provider}/redirect` | OAuth-редирект (VK ID, Yandex ID) |
 | GET | `/auth/social/{provider}/callback` | OAuth-callback |
 
+### Тестовые учётные данные (QA / Swagger Try It)
+
+На dev-сервере после `php artisan db:seed --class=DemoUserSeeder`:
+
+| Переменная | Значение по умолчанию |
+|-----------|------------------------|
+| `SANCTUM_EMAIL` | `demo@modelizmclub.ru` |
+| `SANCTUM_PASSWORD` | `DemoPass123` |
+
+```bash
+# Вход (полный путь API)
+curl -X POST https://dev-cloude.modelizmclub.ru/api/v1/auth/login \
+  -H "Accept: application/json" -H "Content-Type: application/json" \
+  -d '{"email":"demo@modelizmclub.ru","password":"DemoPass123"}'
+
+# Текущий пользователь
+curl https://dev-cloude.modelizmclub.ru/api/v1/auth/me \
+  -H "Authorization: Bearer <token>"
+```
+
+> **Важно:** web-маршруты `/login` и `/register` (без `/api/v1`) — это подсказки для браузера/сканеров.
+> Реальная авторизация только через **`POST /api/v1/auth/login`** и **`POST /api/v1/auth/register`**
+> (поле `consent: true` обязательно при регистрации).
+
 ### Пример: регистрация и запрос
 
 ```bash

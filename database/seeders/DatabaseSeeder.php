@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             PlanSeeder::class,
             LegalDocumentSeeder::class,
             AdminUserSeeder::class,
+            DemoUserSeeder::class,
         ]);
     }
 }
