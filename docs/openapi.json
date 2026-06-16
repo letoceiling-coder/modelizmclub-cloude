@@ -3,7 +3,7 @@
     "info": {
         "title": "\u041c\u043e\u0434\u0435\u043b\u0438\u0437\u043c API",
         "version": "v1",
-        "description": "REST API \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b \u00ab\u041c\u043e\u0434\u0435\u043b\u0438\u0437\u043c\u00bb (Laravel + Sanctum).\n\n- \u0411\u0430\u0437\u043e\u0432\u044b\u0439 \u043f\u0440\u0435\u0444\u0438\u043a\u0441: `/api/v1`.\n- \u0410\u0432\u0442\u043e\u0440\u0438\u0437\u0430\u0446\u0438\u044f: Bearer-\u0442\u043e\u043a\u0435\u043d Sanctum (\u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043e\u043a `Authorization: Bearer <token>`).\n- \u041f\u043e\u043b\u0443\u0447\u0438\u0442\u044c \u0442\u043e\u043a\u0435\u043d: `POST /api/v1/auth/register` \u0438\u043b\u0438 `POST /api/v1/auth/login`.\n- \u041b\u043e\u043a\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u043e\u0432 \u0438 \u043e\u0448\u0438\u0431\u043e\u043a \u2014 \u0440\u0443\u0441\u0441\u043a\u0430\u044f."
+        "description": "REST API \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b \u00ab\u041c\u043e\u0434\u0435\u043b\u0438\u0437\u043c\u00bb (Laravel + Sanctum).\n\n## \u0411\u044b\u0441\u0442\u0440\u044b\u0439 \u0441\u0442\u0430\u0440\u0442 (Swagger Try It)\n\n1. \u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0435\u0440\u0432\u0435\u0440 **Dev** (`https://dev-cloude.modelizmclub.ru/api/v1`).\n2. \u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u0435 **`POST /auth/login`** \u0441 \u0442\u0435\u043b\u043e\u043c \u0438\u0437 \u043f\u0440\u0438\u043c\u0435\u0440\u0430 \u043d\u0438\u0436\u0435.\n3. \u0421\u043a\u043e\u043f\u0438\u0440\u0443\u0439\u0442\u0435 `token` \u0438\u0437 \u043e\u0442\u0432\u0435\u0442\u0430.\n4. \u041d\u0430\u0436\u043c\u0438\u0442\u0435 **Authorize** (\u0437\u0430\u043c\u043e\u043a) \u2192 \u0432\u0432\u0435\u0434\u0438\u0442\u0435 `Bearer <token>` \u2192 **Authorize**.\n5. \u041f\u0440\u043e\u0432\u0435\u0440\u044c\u0442\u0435 **`GET /auth/me`** \u0438 **`GET /ping`**.\n\n## \u0422\u0435\u0441\u0442\u043e\u0432\u044b\u0435 \u0443\u0447\u0451\u0442\u043d\u044b\u0435 \u0434\u0430\u043d\u043d\u044b\u0435 (dev)\n\n| \u0420\u043e\u043b\u044c | E-mail | \u041f\u0430\u0440\u043e\u043b\u044c | \u041f\u0440\u0438\u043c\u0435\u0447\u0430\u043d\u0438\u0435 |\n|------|--------|--------|------------|\n| QA / demo | `demo@modelizmclub.ru` | `DemoPass123` | `SANCTUM_EMAIL` / `SANCTUM_PASSWORD` \u0432 `.env` |\n| \u0410\u0434\u043c\u0438\u043d | `admin@modelizmclub.ru` | `password` | \u043f\u043e\u0441\u043b\u0435 `AdminUserSeeder` |\n\n\u0421\u043e\u0437\u0434\u0430\u043d\u0438\u0435 demo-\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f \u043d\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u0435:\n\n```bash\nphp artisan db:seed --class=DemoUserSeeder --force\n```\n\n### \u041f\u0440\u0438\u043c\u0435\u0440 \u0432\u0445\u043e\u0434\u0430\n\n```json\nPOST /auth/login\n{\n  \"email\": \"demo@modelizmclub.ru\",\n  \"password\": \"DemoPass123\",\n  \"device_name\": \"swagger\"\n}\n```\n\n### \u041f\u0440\u0438\u043c\u0435\u0440 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438\n\n\u041f\u043e\u043b\u0435 **`consent: true`** \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e (152-\u0424\u0417).\n\n```json\nPOST /auth/register\n{\n  \"name\": \"Demo User\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"DemoPass123\",\n  \"password_confirmation\": \"DemoPass123\",\n  \"consent\": true\n}\n```\n\n> Web-\u043c\u0430\u0440\u0448\u0440\u0443\u0442\u044b `/login` \u0438 `/register` (\u0431\u0435\u0437 `/api/v1`) \u2014 \u0442\u043e\u043b\u044c\u043a\u043e \u043f\u043e\u0434\u0441\u043a\u0430\u0437\u043a\u0438 JSON.\n> \u0420\u0435\u0430\u043b\u044c\u043d\u0430\u044f \u0430\u0432\u0442\u043e\u0440\u0438\u0437\u0430\u0446\u0438\u044f: **`POST /api/v1/auth/login`** \u0438 **`POST /api/v1/auth/register`**.\n\n## \u0410\u0432\u0442\u043e\u0440\u0438\u0437\u0430\u0446\u0438\u044f\n\n- \u0411\u0430\u0437\u043e\u0432\u044b\u0439 \u043f\u0440\u0435\u0444\u0438\u043a\u0441: `/api/v1`.\n- \u0417\u0430\u0433\u043e\u043b\u043e\u0432\u043e\u043a: `Authorization: Bearer <token>`.\n- \u041b\u043e\u043a\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u043e\u0432 \u0438 \u043e\u0448\u0438\u0431\u043e\u043a \u2014 \u0440\u0443\u0441\u0441\u043a\u0430\u044f.\n\n## \u041b\u0438\u043c\u0438\u0442\u044b \u0437\u0430\u043f\u0440\u043e\u0441\u043e\u0432\n\n| \u041b\u0438\u043c\u0438\u0442 | \u041f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e |\n|-------|--------------|\n| API (\u0430\u0432\u0442\u043e\u0440\u0438\u0437\u043e\u0432\u0430\u043d) | 120 \u0437\u0430\u043f\u0440./\u043c\u0438\u043d |\n| API (\u0433\u043e\u0441\u0442\u044c) | 40 \u0437\u0430\u043f\u0440./\u043c\u0438\u043d |\n| \u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0438 | 30 \u0437\u0430\u043f\u0440./\u043c\u0438\u043d |\n| Auth (login/register) | 3\u201310 \u0437\u0430\u043f\u0440./\u043c\u0438\u043d |\n\n\u041f\u0440\u0438 `429` \u0441\u043c\u043e\u0442\u0440\u0438\u0442\u0435 \u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043a\u0438 `X-RateLimit-*`, `Retry-After`, `X-Request-Id`.\n\n## \u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0430 \u0444\u0430\u0439\u043b\u043e\u0432\n\n| \u041f\u0440\u043e\u0444\u0438\u043b\u044c | \u0420\u0430\u0441\u0448\u0438\u0440\u0435\u043d\u0438\u044f | \u041c\u0430\u043a\u0441. \u0432\u0435\u0441 |\n|---------|-----------|----------|\n| \u0410\u0432\u0430\u0442\u0430\u0440 | jpg, jpeg, png, webp | 5 \u041c\u0411 |\n| \u0424\u043e\u0442\u043e \u043f\u043e\u0441\u0442\u0430 | jpg, jpeg, png, webp, gif | 15 \u041c\u0411 (\u0434\u043e 10 \u0448\u0442.) |\n| \u0424\u043e\u0442\u043e \u043e\u0431\u044a\u044f\u0432\u043b\u0435\u043d\u0438\u044f | jpg, jpeg, png, webp | 15 \u041c\u0411 |\n| \u0412\u0438\u0434\u0435\u043e \u043f\u043e\u0441\u0442\u0430 | mp4, webm, mov | 200 \u041c\u0411 |\n\n\u0418\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f \u043a\u043e\u043d\u0432\u0435\u0440\u0442\u0438\u0440\u0443\u044e\u0442\u0441\u044f \u0432 **WebP**. \u041c\u0435\u0434\u0438\u0430 \u043e\u0442\u0434\u0430\u0451\u0442\u0441\u044f \u0441 `MEDIA_URL` (\u043d\u0430\u043f\u0440. `https://img.modelizmclub.ru`).\n\n## \u041f\u043e\u043b\u0435\u0437\u043d\u044b\u0435 \u044d\u043d\u0434\u043f\u043e\u0438\u043d\u0442\u044b\n\n- `GET /ping` \u2014 healthcheck\n- `GET /auth/me` \u2014 \u0442\u0435\u043a\u0443\u0449\u0438\u0439 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c (\u0442\u0440\u0435\u0431\u0443\u0435\u0442 Bearer)"
     },
     "servers": [
         {
@@ -15,43 +15,190 @@
             "description": "Dev"
         }
     ],
+    "tags": [
+        {
+            "name": "Auth"
+        }
+    ],
     "security": [
         {
             "http": []
         }
     ],
     "paths": {
-        "/v1/ping": {
-            "get": {
+        "/v1/auth/register": {
+            "post": {
+                "operationId": "auth.register",
+                "summary": "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044f \u043f\u043e \u043f\u043e\u0447\u0442\u0435. \u041e\u0442\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043a\u043e\u0434 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u044f, \u0432\u044b\u0434\u0430\u0451\u0442\u0441\u044f \u0442\u043e\u043a\u0435\u043d",
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/RegisterRequest"
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "device_name": {
+                                                "type": "string",
+                                                "default": "api"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "description": "\u0418\u043c\u044f \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f",
+                                                "example": "Demo User",
+                                                "maxLength": 255
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "format": "email",
+                                                "description": "E-mail (\u0443\u043d\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0439). \u041d\u0430 dev \u043c\u043e\u0436\u043d\u043e \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c SANCTUM_EMAIL",
+                                                "example": "demo@modelizmclub.ru",
+                                                "maxLength": 255
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "description": "\u041c\u0438\u043d. 8 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432, \u0431\u0443\u043a\u0432\u044b \u0438 \u0446\u0438\u0444\u0440\u044b",
+                                                "example": "DemoPass123"
+                                            },
+                                            "password_confirmation": {
+                                                "type": "string",
+                                                "example": "DemoPass123"
+                                            },
+                                            "consent": {
+                                                "type": "boolean",
+                                                "description": "\u0421\u043e\u0433\u043b\u0430\u0441\u0438\u0435 \u043d\u0430 \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0443 \u041f\u0414 (152-\u0424\u0417), \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e true",
+                                                "example": true
+                                            }
+                                        },
+                                        "required": [
+                                            "name",
+                                            "email",
+                                            "password",
+                                            "password_confirmation",
+                                            "consent"
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "200": {
-                        "description": "",
+                    "201": {
+                        "description": "`UserResource`",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "const": "ok"
+                                        "data": {
+                                            "$ref": "#/components/schemas/UserResource"
                                         },
-                                        "service": {
-                                            "type": "string",
-                                            "const": "modelizm-api"
+                                        "token": {
+                                            "type": "string"
                                         },
-                                        "version": {
+                                        "message": {
                                             "type": "string",
-                                            "const": "v1"
+                                            "const": "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044f \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043d\u0430. \u041d\u0430 \u043f\u043e\u0447\u0442\u0443 \u043e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d \u043a\u043e\u0434 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u044f."
                                         }
                                     },
                                     "required": [
-                                        "status",
-                                        "service",
-                                        "version"
+                                        "data",
+                                        "token",
+                                        "message"
                                     ]
                                 }
                             }
                         }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/v1/auth/login": {
+            "post": {
+                "operationId": "auth.login",
+                "description": "\u041f\u043e\u0441\u043b\u0435 \u0432\u0445\u043e\u0434\u0430 \u0441\u043a\u043e\u043f\u0438\u0440\u0443\u0439\u0442\u0435 `token` \u0438 \u0443\u043a\u0430\u0436\u0438\u0442\u0435 \u0432 Authorize \u2192 Bearer \u0434\u043b\u044f `/auth/me`.",
+                "summary": "\u0412\u0445\u043e\u0434 \u043f\u043e \u043f\u043e\u0447\u0442\u0435 \u0438 \u043f\u0430\u0440\u043e\u043b\u044e. \u0412\u043e\u0437\u0432\u0440\u0430\u0449\u0430\u0435\u0442 \u0442\u043e\u043a\u0435\u043d Sanctum",
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/LoginRequest"
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "email": {
+                                                "type": "string",
+                                                "format": "email",
+                                                "description": "SANCTUM_EMAIL \u043d\u0430 dev-\u0441\u0435\u0440\u0432\u0435\u0440\u0435",
+                                                "example": "demo@modelizmclub.ru"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "description": "SANCTUM_PASSWORD \u043d\u0430 dev-\u0441\u0435\u0440\u0432\u0435\u0440\u0435",
+                                                "example": "DemoPass123"
+                                            },
+                                            "device_name": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "description": "\u0418\u043c\u044f \u0443\u0441\u0442\u0440\u043e\u0439\u0441\u0442\u0432\u0430 \u0434\u043b\u044f \u0442\u043e\u043a\u0435\u043d\u0430",
+                                                "example": "swagger",
+                                                "maxLength": 255
+                                            }
+                                        },
+                                        "required": [
+                                            "email",
+                                            "password"
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "`UserResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/UserResource"
+                                        },
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "token"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
                     }
                 },
                 "security": []
@@ -600,117 +747,6 @@
                         "$ref": "#/components/responses/AuthenticationException"
                     }
                 }
-            }
-        },
-        "/v1/auth/register": {
-            "post": {
-                "operationId": "auth.register",
-                "summary": "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044f \u043f\u043e \u043f\u043e\u0447\u0442\u0435. \u041e\u0442\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043a\u043e\u0434 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u044f, \u0432\u044b\u0434\u0430\u0451\u0442\u0441\u044f \u0442\u043e\u043a\u0435\u043d",
-                "tags": [
-                    "Auth"
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/components/schemas/RegisterRequest"
-                                    },
-                                    {
-                                        "type": "object",
-                                        "properties": {
-                                            "device_name": {
-                                                "type": "string",
-                                                "default": "api"
-                                            }
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "`UserResource`",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/components/schemas/UserResource"
-                                        },
-                                        "token": {
-                                            "type": "string"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "const": "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044f \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043d\u0430. \u041d\u0430 \u043f\u043e\u0447\u0442\u0443 \u043e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d \u043a\u043e\u0434 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u044f."
-                                        }
-                                    },
-                                    "required": [
-                                        "data",
-                                        "token",
-                                        "message"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/ValidationException"
-                    }
-                },
-                "security": []
-            }
-        },
-        "/v1/auth/login": {
-            "post": {
-                "operationId": "auth.login",
-                "summary": "\u0412\u0445\u043e\u0434 \u043f\u043e \u043f\u043e\u0447\u0442\u0435 \u0438 \u043f\u0430\u0440\u043e\u043b\u044e. \u0412\u043e\u0437\u0432\u0440\u0430\u0449\u0430\u0435\u0442 \u0442\u043e\u043a\u0435\u043d Sanctum",
-                "tags": [
-                    "Auth"
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/LoginRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "`UserResource`",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/components/schemas/UserResource"
-                                        },
-                                        "token": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "required": [
-                                        "data",
-                                        "token"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/ValidationException"
-                    }
-                },
-                "security": []
             }
         },
         "/v1/auth/me": {
@@ -4696,6 +4732,43 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/ValidationException"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/v1/ping": {
+            "get": {
+                "operationId": "ping",
+                "tags": [
+                    "Ping"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "service": {
+                                            "type": "string"
+                                        },
+                                        "version": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "status",
+                                        "service",
+                                        "version"
+                                    ]
+                                }
+                            }
+                        }
                     }
                 },
                 "security": []

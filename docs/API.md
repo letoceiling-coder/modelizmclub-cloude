@@ -70,10 +70,10 @@ curl https://dev-cloude.modelizmclub.ru/api/v1/auth/me \
 ### Пример: регистрация и запрос
 
 ```bash
-# Регистрация
+# Регистрация (consent обязателен)
 curl -X POST http://127.0.0.1:8000/api/v1/auth/register \
   -H "Accept: application/json" -H "Content-Type: application/json" \
-  -d '{"name":"Иван","email":"ivan@example.com","password":"password123","password_confirmation":"password123"}'
+  -d '{"name":"Иван","email":"ivan@example.com","password":"password123","password_confirmation":"password123","consent":true}'
 
 # Использование токена
 curl http://127.0.0.1:8000/api/v1/auth/me \

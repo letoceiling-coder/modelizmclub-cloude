@@ -59,10 +59,88 @@ return [
         'description' => <<<'MD'
         REST API платформы «Моделизм» (Laravel + Sanctum).
 
+        ## Быстрый старт (Swagger Try It)
+
+        1. Выберите сервер **Dev** (`https://dev-cloude.modelizmclub.ru/api/v1`).
+        2. Выполните **`POST /auth/login`** с телом из примера ниже.
+        3. Скопируйте `token` из ответа.
+        4. Нажмите **Authorize** (замок) → введите `Bearer <token>` → **Authorize**.
+        5. Проверьте **`GET /auth/me`** и **`GET /ping`**.
+
+        ## Тестовые учётные данные (dev)
+
+        | Роль | E-mail | Пароль | Примечание |
+        |------|--------|--------|------------|
+        | QA / demo | `demo@modelizmclub.ru` | `DemoPass123` | `SANCTUM_EMAIL` / `SANCTUM_PASSWORD` в `.env` |
+        | Админ | `admin@modelizmclub.ru` | `password` | после `AdminUserSeeder` |
+
+        Создание demo-пользователя на сервере:
+
+        ```bash
+        php artisan db:seed --class=DemoUserSeeder --force
+        ```
+
+        ### Пример входа
+
+        ```json
+        POST /auth/login
+        {
+          "email": "demo@modelizmclub.ru",
+          "password": "DemoPass123",
+          "device_name": "swagger"
+        }
+        ```
+
+        ### Пример регистрации
+
+        Поле **`consent: true`** обязательно (152-ФЗ).
+
+        ```json
+        POST /auth/register
+        {
+          "name": "Demo User",
+          "email": "newuser@example.com",
+          "password": "DemoPass123",
+          "password_confirmation": "DemoPass123",
+          "consent": true
+        }
+        ```
+
+        > Web-маршруты `/login` и `/register` (без `/api/v1`) — только подсказки JSON.
+        > Реальная авторизация: **`POST /api/v1/auth/login`** и **`POST /api/v1/auth/register`**.
+
+        ## Авторизация
+
         - Базовый префикс: `/api/v1`.
-        - Авторизация: Bearer-токен Sanctum (заголовок `Authorization: Bearer <token>`).
-        - Получить токен: `POST /api/v1/auth/register` или `POST /api/v1/auth/login`.
+        - Заголовок: `Authorization: Bearer <token>`.
         - Локализация ответов и ошибок — русская.
+
+        ## Лимиты запросов
+
+        | Лимит | По умолчанию |
+        |-------|--------------|
+        | API (авторизован) | 120 запр./мин |
+        | API (гость) | 40 запр./мин |
+        | Загрузки | 30 запр./мин |
+        | Auth (login/register) | 3–10 запр./мин |
+
+        При `429` смотрите заголовки `X-RateLimit-*`, `Retry-After`, `X-Request-Id`.
+
+        ## Загрузка файлов
+
+        | Профиль | Расширения | Макс. вес |
+        |---------|-----------|----------|
+        | Аватар | jpg, jpeg, png, webp | 5 МБ |
+        | Фото поста | jpg, jpeg, png, webp, gif | 15 МБ (до 10 шт.) |
+        | Фото объявления | jpg, jpeg, png, webp | 15 МБ |
+        | Видео поста | mp4, webm, mov | 200 МБ |
+
+        Изображения конвертируются в **WebP**. Медиа отдаётся с `MEDIA_URL` (напр. `https://img.modelizmclub.ru`).
+
+        ## Полезные эндпоинты
+
+        - `GET /ping` — healthcheck
+        - `GET /auth/me` — текущий пользователь (требует Bearer)
         MD,
     ],
 

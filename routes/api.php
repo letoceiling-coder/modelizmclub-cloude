@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\PingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 | Маршруты разнесены по доменам.
 */
 
-Route::get('/ping', fn () => ['status' => 'ok', 'service' => 'modelizm-api', 'version' => 'v1']);
+Route::get('/ping', PingController::class);
 
 foreach ([
     'Users',

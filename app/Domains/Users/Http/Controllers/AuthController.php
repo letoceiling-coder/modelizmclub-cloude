@@ -9,6 +9,8 @@ use App\Domains\Users\Http\Requests\RegisterRequest;
 use App\Domains\Users\Http\Resources\UserResource;
 use App\Domains\Users\Services\AuthService;
 use App\Http\Controllers\Controller;
+use Dedoc\Scramble\Attributes\BodyParameter;
+use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -21,6 +23,12 @@ class AuthController extends Controller
     /**
      * Регистрация по почте. Отправляется код подтверждения, выдаётся токен.
      */
+    #[Group('Auth')]
+    #[BodyParameter('name', example: 'Demo User', description: 'Имя пользователя')]
+    #[BodyParameter('email', example: 'demo@modelizmclub.ru', description: 'E-mail (уникальный). На dev можно использовать SANCTUM_EMAIL')]
+    #[BodyParameter('password', example: 'DemoPass123', description: 'Мин. 8 символов, буквы и цифры')]
+    #[BodyParameter('password_confirmation', example: 'DemoPass123')]
+    #[BodyParameter('consent', type: 'boolean', example: true, description: 'Согласие на обработку ПД (152-ФЗ), обязательно true')]
     public function register(RegisterRequest $request): JsonResponse
     {
         $user = $this->auth->register($request->validated(), $request);
@@ -37,7 +45,13 @@ class AuthController extends Controller
 
     /**
      * Вход по почте и паролю. Возвращает токен Sanctum.
+     *
+     * После входа скопируйте `token` и укажите в Authorize → Bearer для `/auth/me`.
      */
+    #[Group('Auth')]
+    #[BodyParameter('email', example: 'demo@modelizmclub.ru', description: 'SANCTUM_EMAIL на dev-сервере')]
+    #[BodyParameter('password', example: 'DemoPass123', description: 'SANCTUM_PASSWORD на dev-сервере')]
+    #[BodyParameter('device_name', example: 'swagger', required: false, description: 'Имя устройства для токена')]
     public function login(LoginRequest $request): JsonResponse
     {
         $result = $this->auth->login(
