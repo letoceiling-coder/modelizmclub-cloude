@@ -19,14 +19,14 @@ class CommunityFactory extends Factory
 
     public function definition(): array
     {
-        $name = fake()->unique()->company();
+        $name = \fake()->unique()->company();
 
         return [
             'owner_id' => User::factory(),
             'category_id' => null,
             'name' => $name,
             'slug' => Str::slug($name).'-'.Str::lower(Str::random(5)),
-            'description' => fake()->optional()->paragraph(),
+            'description' => \fake()->optional()->paragraph(),
             'status' => CommunityStatus::Active->value,
         ];
     }

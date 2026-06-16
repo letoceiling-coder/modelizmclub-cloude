@@ -24,7 +24,7 @@ class ReportFactory extends Factory
             'reportable_id' => Post::factory(),
             'reportable_type' => 'post',
             'reason' => 'спам',
-            'description' => fake()->sentence(),
+            'description' => \fake()->sentence(),
             'status' => ReportStatus::Open->value,
         ];
     }

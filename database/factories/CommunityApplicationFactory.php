@@ -21,8 +21,8 @@ class CommunityApplicationFactory extends Factory
         return [
             'user_id' => User::factory(),
             'category_id' => null,
-            'proposed_name' => fake()->unique()->company(),
-            'description' => fake()->paragraph(),
+            'proposed_name' => \fake()->unique()->company(),
+            'description' => \fake()->paragraph(),
             'status' => CommunityApplicationStatus::Pending->value,
         ];
     }

@@ -17,8 +17,8 @@ class CityFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->city(),
-            'region' => fake()->word().' область',
+            'name' => \fake()->city(),
+            'region' => \fake()->word().' область',
             'is_active' => true,
         ];
     }

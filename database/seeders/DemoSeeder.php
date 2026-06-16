@@ -67,7 +67,7 @@ class DemoSeeder extends Seeder
                 $posts->push(Post::factory()->create([
                     'user_id' => $user->id,
                     'category_id' => $contentCategories->random()->id ?? null,
-                    'community_id' => fake()->boolean(40) ? $communities->random()->id : null,
+                    'community_id' => \fake()->boolean(40) ? $communities->random()->id : null,
                 ]));
             }
         }
@@ -80,7 +80,7 @@ class DemoSeeder extends Seeder
                     'user_id' => $commenter->id,
                 ]);
 
-                if (fake()->boolean(40)) {
+                if (\fake()->boolean(40)) {
                     Comment::factory()->create([
                         'post_id' => $post->id,
                         'user_id' => $users->random()->id,

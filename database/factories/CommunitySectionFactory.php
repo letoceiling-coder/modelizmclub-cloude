@@ -19,8 +19,8 @@ class CommunitySectionFactory extends Factory
     {
         return [
             'community_id' => Community::factory(),
-            'name' => fake()->words(2, true),
-            'position' => fake()->numberBetween(0, 20),
+            'name' => \fake()->words(2, true),
+            'position' => \fake()->numberBetween(0, 20),
             'is_active' => true,
         ];
     }

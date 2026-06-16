@@ -20,7 +20,7 @@ class ContentRuleFactory extends Factory
     {
         return [
             'type' => ContentRuleType::StopWord->value,
-            'value' => fake()->unique()->word(),
+            'value' => \fake()->unique()->word(),
             'action' => ContentRuleAction::Block->value,
             'is_active' => true,
         ];
